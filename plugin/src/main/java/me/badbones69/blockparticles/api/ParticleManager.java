@@ -21,6 +21,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 public class ParticleManager {
     
@@ -42,10 +43,10 @@ public class ParticleManager {
         if (hasOldFiles()) {
             String prefix = fileManager.getPrefix();
             boolean isLogging = fileManager.isLogging();
-            if (isLogging) System.out.println(prefix + "Old files have been detected!");
-            if (isLogging) System.out.println(prefix + "Converting old files.");
+            if (isLogging) Bukkit.getLogger().log(Level.INFO, prefix + "Old files have been detected!");
+            if (isLogging) Bukkit.getLogger().log(Level.INFO, prefix + "Converting old files.");
             convertOldFiles();
-            if (isLogging) System.out.println(prefix + "Finished converting old files.");
+            if (isLogging) Bukkit.getLogger().log(Level.INFO, prefix + "Finished converting old files.");
         }
         FileConfiguration config = Files.CONFIG.getFile();
         if (config.contains("settings.heads")) {
@@ -91,7 +92,7 @@ public class ParticleManager {
             config.set("settings.prefix", config.getString("Settings.Prefix"));
             config.set("Settings", null);
             Files.CONFIG.saveFile();
-            if (isLogging) System.out.println(prefix + "Finished converting config.yml.");
+            if (isLogging) Bukkit.getLogger().log(Level.INFO, prefix + "Finished converting config.yml.");
         }
         FileConfiguration data = Files.DATA.getFile();
         if (data.contains("Locations")) {
@@ -114,7 +115,7 @@ public class ParticleManager {
                 data.set("locations." + id + ".particle", particle.getParticleTypeName());
             }
             Files.DATA.saveFile();
-            if (isLogging) System.out.println(prefix + "Finished converting data.yml.");
+            if (isLogging) Bukkit.getLogger().log(Level.INFO, prefix + "Finished converting data.yml.");
         }
     }
     

@@ -10,6 +10,7 @@ import org.inventivetalent.reflection.resolver.minecraft.OBCClassResolver;
 import org.inventivetalent.reflection.util.AccessUtil;
 import sun.reflect.ConstructorAccessor;
 
+import java.util.logging.Level;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -29,9 +30,9 @@ public class Minecraft {
     private static Class<?> CraftEntity;
     
     static {
-        System.out.println("[ReflectionHelper] I am loaded from package " + Minecraft.class.getPackage().getName());
+        Bukkit.getLogger().log(Level.INFO, "[ReflectionHelper] I am loaded from package " + Minecraft.class.getPackage().getName());
         VERSION = Version.getVersion();
-        System.out.println("[ReflectionHelper] Version is " + VERSION);
+        Bukkit.getLogger().log(Level.INFO, "[ReflectionHelper] Version is " + VERSION);
         
         try {
             NmsEntity = nmsClassResolver.resolve("Entity");
@@ -133,9 +134,9 @@ public class Minecraft {
                     return version;
                 }
             }
-            System.err.println("[ReflectionHelper] Failed to find version enum for '" + name + "'/'" + versionPackage + "'");
+            Bukkit.getLogger().log(Level.SEVERE, "[ReflectionHelper] Failed to find version enum for '" + name + "'/'" + versionPackage + "'");
             
-            System.out.println("[ReflectionHelper] Generating dynamic constant...");
+            Bukkit.getLogger().log(Level.INFO, "[ReflectionHelper] Generating dynamic constant...");
             Matcher matcher = NUMERIC_VERSION_PATTERN.matcher(versionPackage);
             while (matcher.find()) {
                 if (matcher.groupCount() < 3) {
@@ -174,8 +175,8 @@ public class Minecraft {
                     newValues[newValues.length - 1] = dynamicVersion;
                     valuesField.set(null, newValues);
                     
-                    System.out.println("[ReflectionHelper] Injected dynamic version " + packge + " (#" + numVersion + ").");
-                    System.out.println("[ReflectionHelper] Please inform inventivetalent about the outdated version, as this is not guaranteed to work.");
+                    Bukkit.getLogger().log(Level.INFO, "[ReflectionHelper] Injected dynamic version " + packge + " (#" + numVersion + ").");
+                    Bukkit.getLogger().log(Level.INFO, "[ReflectionHelper] Please inform inventivetalent about the outdated version, as this is not guaranteed to work.");
                     return dynamicVersion;
                 } catch (ReflectiveOperationException e) {
                     e.printStackTrace();
