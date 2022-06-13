@@ -154,149 +154,150 @@ public class ParticleManager {
      * @param type The Particle you wish to use.
      * @param loc  The location you wish to spawn the Particles.
      * @param name The Location Name.
+     * @param cooldown The Particle cooldown
      */
-    public void setParticle(Particles type, Location loc, String name) {
+    public void setParticle(Particles type, Location loc, String name, int cooldown) {
         if (particleControl.getLocations().containsKey(name)) {
             Bukkit.getServer().getScheduler().cancelTask(particleControl.getLocations().get(name));
         }
         switch (type) {
             case LOVETORNADO:
-                particleControl.playLoveTornado(loc, name);
+                particleControl.playLoveTornado(loc, name, cooldown);
                 break;
             case WITCHTORNADO:
-                particleControl.playWitchTornado(loc, name);
+                particleControl.playWitchTornado(loc, name, cooldown);
                 break;
             case LOVEWELL:
-                particleControl.playLoveWell(loc, name);
+                particleControl.playLoveWell(loc, name, cooldown);
                 break;
             case BIGLOVEWELL:
-                particleControl.playBigLoveWell(loc, name);
+                particleControl.playBigLoveWell(loc, name, cooldown);
                 break;
             case HALO:
-                particleControl.playHalo(loc, name);
+                particleControl.playHalo(loc, name, cooldown);
                 break;
             case SANTAHAT:
-                particleControl.playSantaHat(loc, name);
+                particleControl.playSantaHat(loc, name, cooldown);
                 break;
             case SOULWELL:
-                particleControl.playSoulWell(loc, name);
+                particleControl.playSoulWell(loc, name, cooldown);
                 break;
             case BIGSOULWELL:
-                particleControl.playBigSoulWell(loc, name);
+                particleControl.playBigSoulWell(loc, name, cooldown);
                 break;
             case FLAMEWHEEL:
-                particleControl.playFlameWheel(loc, name);
+                particleControl.playFlameWheel(loc, name, cooldown);
                 break;
             case MARIO:
-                Fountains.startMario(loc, name);
+                Fountains.startMario(loc, name, cooldown);
                 break;
             case POKEMON:
-                Fountains.startPokemon(loc, name);
+                Fountains.startPokemon(loc, name, cooldown);
                 break;
             case FOOD:
-                Fountains.startFood(loc, name);
+                Fountains.startFood(loc, name, cooldown);
                 break;
             case MOBS:
-                Fountains.startMobs(loc, name);
+                Fountains.startMobs(loc, name, cooldown);
                 break;
             case SNOWBLAST:
-                particleControl.playSnowBlast(loc, name);
+                particleControl.playSnowBlast(loc, name, cooldown);
                 break;
             case RAINBOW:
-                particleControl.playRainbow(loc, name);
+                particleControl.playRainbow(loc, name, cooldown);
                 break;
             case ENDERSIGNAL:
-                particleControl.playEnderSignal(loc, name);
+                particleControl.playEnderSignal(loc, name, cooldown);
                 break;
             case MOBSPAWNER:
-                particleControl.playMobSpawner(loc, name);
+                particleControl.playMobSpawner(loc, name, cooldown);
                 break;
             case ANGRYVILLAGER:
-                particleControl.playAngryVillager(loc, name);
+                particleControl.playAngryVillager(loc, name, cooldown);
                 break;
             case HAPPYVILLAGER:
-                particleControl.playHappyVillager(loc, name);
+                particleControl.playHappyVillager(loc, name, cooldown);
                 break;
             case FOOTPRINT:
-                particleControl.playFootPrint(loc, name);
+                particleControl.playFootPrint(loc, name, cooldown);
                 break;
             case FIRESPEW:
-                particleControl.playFireSpew(loc, name);
+                particleControl.playFireSpew(loc, name, cooldown);
                 break;
             case SPEW:
-                particleControl.playSpew(loc, name);
+                particleControl.playSpew(loc, name, cooldown);
                 break;
             case STORM:
-                particleControl.playStorm(loc, name);
+                particleControl.playStorm(loc, name, cooldown);
                 break;
             case SNOWSTORM:
-                particleControl.playSnowStorm(loc, name);
+                particleControl.playSnowStorm(loc, name, cooldown);
                 break;
             case FIRESTORM:
-                particleControl.playFireStorm(loc, name);
+                particleControl.playFireStorm(loc, name, cooldown);
                 break;
             case WITCH:
-                particleControl.playSpiral(loc, name, Particles.WITCH, 5);
+                particleControl.playSpiral(loc, name, Particles.WITCH, 5, cooldown);
                 break;
             case DOUBLEWITCH:
-                particleControl.playDoubleSpiral(loc, name, Particles.DOUBLEWITCH, 5);
+                particleControl.playDoubleSpiral(loc, name, Particles.DOUBLEWITCH, 5, cooldown);
                 break;
             case MAGIC:
-                particleControl.playMagic(loc, name);
+                particleControl.playMagic(loc, name, cooldown);
                 break;
             case PRESENTS:
-                Fountains.startPresents(loc, name);
+                Fountains.startPresents(loc, name, cooldown);
                 break;
             case MUSIC:
-                particleControl.playMusic(loc, name);
+                particleControl.playMusic(loc, name, cooldown);
                 break;
             case POTION:
-                particleControl.playPotion(loc, name);
+                particleControl.playPotion(loc, name, cooldown);
                 break;
             case SNOW:
-                particleControl.playSnow(loc, name);
+                particleControl.playSnow(loc, name, cooldown);
                 break;
             case WATER:
-                particleControl.startWater(loc, name);
+                particleControl.startWater(loc, name, cooldown);
                 break;
             case CHAINS:
-                particleControl.playChains(loc, name);
+                particleControl.playChains(loc, name, cooldown);
                 break;
             case ENCHANT:
-                particleControl.playEnchant(loc, name);
+                particleControl.playEnchant(loc, name, cooldown);
                 break;
             case FOG:
-                particleControl.playFog(loc, name);
+                particleControl.playFog(loc, name, cooldown);
                 break;
             case HEADS:
-                Fountains.startHeads(loc, name);
+                Fountains.startHeads(loc, name, cooldown);
                 break;
             case FLAME:
-                particleControl.playFlame(loc, name);
+                particleControl.playFlame(loc, name, cooldown);
                 break;
             case BIGFLAME:
-                particleControl.playBigFlame(loc, name);
+                particleControl.playBigFlame(loc, name, cooldown);
                 break;
             case HALLOWEEN:
-                Fountains.startHalloween(loc, name);
+                Fountains.startHalloween(loc, name, cooldown);
                 break;
             case GEMS:
-                Fountains.startGems(loc, name);
+                Fountains.startGems(loc, name, cooldown);
                 break;
             case VOLCANO:
-                particleControl.playVolcano(loc, name);
+                particleControl.playVolcano(loc, name, cooldown);
                 break;
             case SPIRAL:
-                particleControl.playSpiral(loc, name, Particles.SPIRAL, 1);
+                particleControl.playSpiral(loc, name, Particles.SPIRAL, 1, cooldown);
                 break;
             case DOUBLESPIRAL:
-                particleControl.playDoubleSpiral(loc, name, Particles.DOUBLESPIRAL, 1);
+                particleControl.playDoubleSpiral(loc, name, Particles.DOUBLESPIRAL, 1, cooldown);
                 break;
             case CRIT:
-                particleControl.playCrit(loc, name);
+                particleControl.playCrit(loc, name, cooldown);
                 break;
             case BIGCRIT:
-                particleControl.playBigCrit(loc, name);
+                particleControl.playBigCrit(loc, name, cooldown);
                 break;
         }
     }

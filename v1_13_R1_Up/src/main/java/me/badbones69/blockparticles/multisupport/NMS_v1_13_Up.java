@@ -15,42 +15,42 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class NMS_v1_13_Up implements ParticleControl {
-    
+
     private final HashMap<String, Integer> locations = new HashMap<>();
     private final Plugin plugin = Bukkit.getPluginManager().getPlugin("BlockParticles");
     private final int range = 25;
     private final Random random = new Random();
-    
+
     private Location randomDrop(Location location) {
         double x = random.nextInt(100) / 100.0 - .50;
         double z = random.nextInt(100) / 100.0 - .50;
         return location.add(x, 0, z);
     }
-    
+
     private float randomVector() {
         return (float) -.05 + (float) (Math.random() * ((.05 - -.05)));
     }
-    
+
     public HashMap<String, Integer> getLocations() {
         return locations;
     }
-    
-    public void playVolcano(final Location location, String id) {
+
+    public void playVolcano(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .8, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.LAVA, l, 10, 0, 0, 0, 0);
             }
-        }, 0, 4));
+        }, 0, 4+ cooldown));
     }
-    
-    public void playBigFlame(final Location location, String id) {
+
+    public void playBigFlame(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, .1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -59,13 +59,13 @@ public class NMS_v1_13_Up implements ParticleControl {
                 for (Location location : getCircle(l, 2, 25))
                     l.getWorld().spawnParticle(Particle.FLAME, location, 1, 0, 0, 0, 0);
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
-    
-    public void playFlame(final Location location, String id) {
+
+    public void playFlame(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -74,15 +74,15 @@ public class NMS_v1_13_Up implements ParticleControl {
                 for (Location location : getCircle(l, 1, 20))
                     l.getWorld().spawnParticle(Particle.FLAME, location, 1, 0, 0, 0, 0);
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
-    
-    public void playDoubleSpiral(final Location location, String id, Particles particles, int amount) {
+
+    public void playDoubleSpiral(final Location location, String id, Particles particles, int amount, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .7, .5);
             int time = 16;
             final Particle particle = particles == Particles.DOUBLEWITCH ? Particle.SPELL_WITCH : Particle.FIREWORKS_SPARK;
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -153,15 +153,15 @@ public class NMS_v1_13_Up implements ParticleControl {
                 }
                 time--;
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playSpiral(final Location location, String id, Particles particles, int amount) {
+
+    public void playSpiral(final Location location, String id, Particles particles, int amount, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .7, .5);
             int time = 16;
             final Particle particle = particles == Particles.WITCH ? Particle.SPELL_WITCH : Particle.FIREWORKS_SPARK;
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -186,75 +186,75 @@ public class NMS_v1_13_Up implements ParticleControl {
                 }
                 time--;
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playCrit(final Location location, String id) {
+
+    public void playCrit(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 1.1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.CRIT, l.clone(), 1, 0, 0, 0, 0);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playBigCrit(final Location location, String id) {
+
+    public void playBigCrit(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .5, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 for (Location location : getCircle(l, 2, 20))
                     l.getWorld().spawnParticle(Particle.CRIT, location, 1, 0, 0, 0, 0);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playStorm(final Location location, String id) {
+
+    public void playStorm(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 2, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.CLOUD, l.clone(), 15, .3f, 0, 0.3f, 0);
                 l.getWorld().spawnParticle(Particle.WATER_DROP, l.clone().add(0, 0, .1), 10, 0.2f, 0, 0.2f, 0);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playFog(final Location location, String id) {
+
+    public void playFog(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .5, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.CLOUD, l, 20, .3f, 0, .3f, 0.05f);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playEnchant(final Location location, String id) {
+
+    public void playEnchant(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 1.5, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, l, 20, 0, 0, 0, 2);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playChains(final Location location, String id) {
+
+    public void playChains(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -265,7 +265,7 @@ public class NMS_v1_13_Up implements ParticleControl {
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(.6, .4, .6), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(.5, .6, .5), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(.4, .8, .4), 1, 0, 0, 0, 0);
-                
+
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-1, 0, 1), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-.9, .1, .9), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-.8, .2, .8), 1, 0, 0, 0, 0);
@@ -273,7 +273,7 @@ public class NMS_v1_13_Up implements ParticleControl {
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-.6, .4, .6), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-.5, .6, .5), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-.4, .8, .4), 1, 0, 0, 0, 0);
-                
+
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-1, 0, -1), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-.9, .1, -.9), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-.8, .2, -.8), 1, 0, 0, 0, 0);
@@ -281,7 +281,7 @@ public class NMS_v1_13_Up implements ParticleControl {
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-.6, .4, -.6), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-.5, .6, -.5), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(-.4, .8, -.4), 1, 0, 0, 0, 0);
-                
+
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(1, 0, -1), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(.9, .1, -.9), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(.8, .2, -.8), 1, 0, 0, 0, 0);
@@ -290,13 +290,13 @@ public class NMS_v1_13_Up implements ParticleControl {
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(.5, .6, -.5), 1, 0, 0, 0, 0);
                 l.getWorld().spawnParticle(Particle.FLAME, l.clone().add(.4, .8, -.4), 1, 0, 0, 0, 0);
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
-    
-    public void playFireStorm(final Location location, String id) {
+
+    public void playFireStorm(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 2, .5);
-            
+
             @Override
             public void run() {
                 try {
@@ -310,37 +310,37 @@ public class NMS_v1_13_Up implements ParticleControl {
                     e.printStackTrace();
                 }
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playSnow(final Location location, String id) {
+
+    public void playSnow(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 2, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, l, 1, .7f, .7f, .7f, 0);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playSpew(final Location location, String id) {
+
+    public void playSpew(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, l, 0, randomVector(), .1f, randomVector(), 1);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playPotion(final Location location, String id) {
+
+    public void playPotion(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .2, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -348,15 +348,15 @@ public class NMS_v1_13_Up implements ParticleControl {
                 l.getWorld().spawnParticle(Particle.SPELL_MOB, l, 6, .3f, 0, .3f, randomColor());
                 l.getWorld().spawnParticle(Particle.SPELL_MOB, l, 6, .3f, 0, .3f, randomColor());
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playMusic(final Location location, String id) {
+
+    public void playMusic(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .2, .5);
             final ArrayList<Location> locs = getCircle(l, 1, 16);
             int time = 0;
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -397,14 +397,14 @@ public class NMS_v1_13_Up implements ParticleControl {
                     l.getWorld().spawnParticle(Particle.NOTE, locs.get(i), 1, 0, 0, 0, randomColor());
                 time++;
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playMagic(final Location location, String id) {
+
+    public void playMagic(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .5, .5);
             int time = 16;
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -437,7 +437,7 @@ public class NMS_v1_13_Up implements ParticleControl {
                     l.getWorld().spawnParticle(Particle.CRIT_MAGIC, l.clone().add(0, .65, -.65), 5, 0, 0, 0, 0);
                 if (time == 14)
                     l.getWorld().spawnParticle(Particle.CRIT_MAGIC, l.clone().add(0, .75, -.43), 5, 0, 0, 0, 0);
-                
+
                 if (time == 15) l.getWorld().spawnParticle(Particle.CRIT_MAGIC, l.clone().add(.8, 0, 0), 5, 0, 0, 0, 0);
                 if (time == 14)
                     l.getWorld().spawnParticle(Particle.CRIT_MAGIC, l.clone().add(.75, 0, .43), 5, 0, 0, 0, 0);
@@ -470,26 +470,26 @@ public class NMS_v1_13_Up implements ParticleControl {
                 }
                 time--;
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playSnowStorm(final Location location, String id) {
+
+    public void playSnowStorm(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 2, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.CLOUD, l, 15, .3f, 0, .3f, 0);
                 l.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, l, 2, .3f, 0, .3f, 0);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playFireSpew(final Location location, String id) {
+
+    public void playFireSpew(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -497,61 +497,61 @@ public class NMS_v1_13_Up implements ParticleControl {
                 l.getWorld().spawnParticle(Particle.FLAME, l, 0, randomVector(), .1f, randomVector(), 1.5f);
                 l.getWorld().spawnParticle(Particle.FLAME, l, 0, randomVector(), .1f, randomVector(), 1.5f);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playFootPrint(final Location location, String id) {
+
+    public void playFootPrint(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.TOWN_AURA, l, 3, 1, 0, 1, 0);
             }
-        }, 0, 20));
+        }, 0, 120 - cooldown));
     }
-    
-    public void playHappyVillager(final Location location, String id) {
+
+    public void playHappyVillager(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 location.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, l, 10, .5f, .5f, .5f, 0);
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
-    
-    public void playAngryVillager(final Location location, String id) {
+
+    public void playAngryVillager(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, l, 5, .5f, .5f, .5f, 0);
             }
-        }, 0, 10));
+        }, 0, 10 + cooldown));
     }
-    
-    public void playMobSpawner(final Location location, String id) {
+
+    public void playMobSpawner(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.FLAME, l, 15, .5f, .5f, .5f, 0);
             }
-        }, 0, 8));
+        }, 0, 8 + cooldown));
     }
-    
-    public void startWater(final Location location, String id) {
+
+    public void startWater(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .8, .6);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -562,13 +562,13 @@ public class NMS_v1_13_Up implements ParticleControl {
                 location.getWorld().spawnParticle(Particle.WATER_DROP, l.clone().add(.2, .3, -.2), 10, 0, 0, 0, 0);
                 location.getWorld().spawnParticle(Particle.WATER_DROP, l.clone().add(-.2, .3, -.2), 10, 0, 0, 0, 0);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playEnderSignal(final Location location, String id) {
+
+    public void playEnderSignal(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 0, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -577,13 +577,13 @@ public class NMS_v1_13_Up implements ParticleControl {
                 location.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 1);
                 location.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 1);
             }
-        }, 0, 8));
+        }, 0, 8 + cooldown));
     }
-    
-    public void playRainbow(final Location location, String id) {
+
+    public void playRainbow(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -593,25 +593,25 @@ public class NMS_v1_13_Up implements ParticleControl {
                 Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(r, g, b), 1);
                 l.getWorld().spawnParticle(Particle.REDSTONE, l, 10, .5f, .5f, .5f, 1, dustOptions);
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
-    
-    public void playSnowBlast(final Location location, String id) {
+
+    public void playSnowBlast(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .5, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 l.getWorld().spawnParticle(Particle.SNOW_SHOVEL, l, 40, 0, 0, 0, .2f);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
-    
-    public void playHalo(final Location location, String id) {
+
+    public void playHalo(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 1.3, .5);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
@@ -638,10 +638,10 @@ public class NMS_v1_13_Up implements ParticleControl {
                     e.printStackTrace();
                 }
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
-    
-    public void playSantaHat(final Location location, String id) {
+
+    public void playSantaHat(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l1 = location.clone().add(.5, 1, .5);
             final Location l2 = l1.clone().add(0, .05, 0);
@@ -654,7 +654,7 @@ public class NMS_v1_13_Up implements ParticleControl {
             final Location l9 = l8.clone().add(0, .05, 0);
             final Location l10 = l9.clone().add(0, .1, 0);
             final Location l11 = l10.clone().add(0, .05, 0);
-            
+
             @Override
             public void run() {
                 if (noPlayers(l1.clone(), 20)) return;
@@ -689,21 +689,21 @@ public class NMS_v1_13_Up implements ParticleControl {
                     e.printStackTrace();
                 }
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
-    
-    public void playSoulWell(final Location location, final String id) {
+
+    public void playSoulWell(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
-            
+
             void startSoulWell(final Location location, final String id) {
                 final int num = random.nextInt(Integer.MAX_VALUE);
                 S.put(num, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
                     final Location height = location.clone();
                     int loc = 0;
                     int lifeSpan = 0;
-                    
+
                     @Override
                     public void run() {
                         ArrayList<Location> locs = getCircle(height, 2, 50);
@@ -721,27 +721,27 @@ public class NMS_v1_13_Up implements ParticleControl {
                     }
                 }, 0, 1));
             }
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 startSoulWell(l, id);
             }
-        }, 0, 16));
+        }, 0, 16 + cooldown));
     }
-    
-    public void playBigSoulWell(final Location location, final String id) {
+
+    public void playBigSoulWell(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
-            
+
             void startBigSoulWell(final Location location, final String id) {
                 final int num = random.nextInt(Integer.MAX_VALUE);
                 S.put(num, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
                     final Location height = location.clone();
                     int loc = 0;
                     int lifeSpan = 0;
-                    
+
                     @Override
                     public void run() {
                         ArrayList<Location> locs = getCircle(height, 3.5, 75);
@@ -759,20 +759,20 @@ public class NMS_v1_13_Up implements ParticleControl {
                     }
                 }, 0, 1));
             }
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 startBigSoulWell(l, id);
             }
-        }, 0, 25));
+        }, 0, 25 + cooldown));
     }
-    
-    public void playFlameWheel(final Location location, final String id) {
+
+    public void playFlameWheel(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, .1, .5);
-            
+
             void startFlameWheel(final Location location, final String id) {
                 final int num = random.nextInt(Integer.MAX_VALUE);
                 S.put(num, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
@@ -781,12 +781,12 @@ public class NMS_v1_13_Up implements ParticleControl {
                     int o = 74;
                     int f = 0;
                     int ringTimer = 0;
-                    
+
                     @Override
                     public void run() {
                         ArrayList<Location> locs = getCircle(l, 3.5, 75);
                         ArrayList<Location> locs2 = getCircleReverse(l, 3.5, 75);
-                        float speed = (float) .15;
+                        float cooldown = (float) .15;
                         Vector v = locs.get(i).toVector().subtract(l.toVector()).normalize();
                         Vector v2 = locs2.get(i).toVector().subtract(l.toVector()).normalize();
                         Vector v3 = locs.get(o).toVector().subtract(l.toVector()).normalize();
@@ -798,14 +798,14 @@ public class NMS_v1_13_Up implements ParticleControl {
                             }
                         }
                         //Throws the fire inwords.
-                        l.getWorld().spawnParticle(Particle.FLAME, locs.get(i), 0, -v.getX(), 0, -v.getZ(), speed);
-                        l.getWorld().spawnParticle(Particle.FLAME, locs2.get(i), 0, -v2.getX(), 0, -v2.getZ(), speed);
-                        l.getWorld().spawnParticle(Particle.FLAME, locs.get(o), 0, -v3.getX(), 0, -v3.getZ(), speed);
-                        l.getWorld().spawnParticle(Particle.FLAME, locs2.get(o), 0, -v4.getX(), 0, -v4.getZ(), speed);
-                        /*ParticleEffect.FLAME.display(v.multiply(-2), speed, locs.get(i), 100);
-                        ParticleEffect.FLAME.display(v2.multiply(-2), speed, locs2.get(i), 100);
-                        ParticleEffect.FLAME.display(v3.multiply(-2), speed, locs.get(o), 100);
-                        ParticleEffect.FLAME.display(v4.multiply(-2), speed, locs2.get(o), 100);*/
+                        l.getWorld().spawnParticle(Particle.FLAME, locs.get(i), 0, -v.getX(), 0, -v.getZ(), cooldown);
+                        l.getWorld().spawnParticle(Particle.FLAME, locs2.get(i), 0, -v2.getX(), 0, -v2.getZ(), cooldown);
+                        l.getWorld().spawnParticle(Particle.FLAME, locs.get(o), 0, -v3.getX(), 0, -v3.getZ(), cooldown);
+                        l.getWorld().spawnParticle(Particle.FLAME, locs2.get(o), 0, -v4.getX(), 0, -v4.getZ(), cooldown);
+                        /*ParticleEffect.FLAME.display(v.multiply(-2), cooldown, locs.get(i), 100);
+                        ParticleEffect.FLAME.display(v2.multiply(-2), cooldown, locs2.get(i), 100);
+                        ParticleEffect.FLAME.display(v3.multiply(-2), cooldown, locs.get(o), 100);
+                        ParticleEffect.FLAME.display(v4.multiply(-2), cooldown, locs2.get(o), 100);*/
                         i++;
                         f++;
                         o--;
@@ -820,20 +820,20 @@ public class NMS_v1_13_Up implements ParticleControl {
                     }
                 }, 0, 1));
             }
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 startFlameWheel(l.clone(), id);
             }
-        }, 0, 25));
+        }, 0, 25 + cooldown));
     }
-    
-    public void playWitchTornado(final Location location, final String id) {
+
+    public void playWitchTornado(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
-            
+
             void startWitchTornado(final Location location, final String id) {
                 final int num = random.nextInt(Integer.MAX_VALUE);
                 S.put(num, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
@@ -842,7 +842,7 @@ public class NMS_v1_13_Up implements ParticleControl {
                     int diamaterSwitch = 0;
                     double radius = 1.5;
                     int lifeSpan = 0;
-                    
+
                     @Override
                     public void run() {
                         ArrayList<Location> locs = getCircle(height, radius, 50);
@@ -863,20 +863,20 @@ public class NMS_v1_13_Up implements ParticleControl {
                     }
                 }, 0, 1));
             }
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 startWitchTornado(l, id);
             }
-        }, 0, 30));
+        }, 0, 30 + cooldown));
     }
-    
-    public void playLoveTornado(final Location location, final String id) {
+
+    public void playLoveTornado(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
-            
+
             void startLoveTornado(final Location location, final String id) {
                 final int num = random.nextInt(Integer.MAX_VALUE);
                 S.put(num, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
@@ -885,7 +885,7 @@ public class NMS_v1_13_Up implements ParticleControl {
                     double radius = 1.5;
                     int lifeSpan = 0;
                     int nextLocation = 0;
-                    
+
                     @Override
                     public void run() {
                         ArrayList<Location> locs = getCircle(height, radius, 50);
@@ -906,27 +906,27 @@ public class NMS_v1_13_Up implements ParticleControl {
                     }
                 }, 0, 1));
             }
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 startLoveTornado(l, id);
             }
-        }, 0, 30));
+        }, 0, 30 + cooldown));
     }
-    
-    public void playBigLoveWell(final Location location, final String id) {
+
+    public void playBigLoveWell(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
-            
+
             void startBigLoveWell(final Location location, final String id) {
                 final int num = random.nextInt(Integer.MAX_VALUE);
                 S.put(num, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
                     final Location height = location.clone();
                     int loc = 0;
                     int lifeSpan = 0;
-                    
+
                     @Override
                     public void run() {
                         ArrayList<Location> locs = getCircle(height, 3.5, 75);
@@ -944,27 +944,27 @@ public class NMS_v1_13_Up implements ParticleControl {
                     }
                 }, 0, 1));
             }
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 startBigLoveWell(l, id);
             }
-        }, 0, 25));
+        }, 0, 25 + cooldown));
     }
-    
-    public void playLoveWell(final Location location, final String id) {
+
+    public void playLoveWell(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
-            
+
             void startLoveWell(final Location location, final String id) {
                 final int num = random.nextInt(Integer.MAX_VALUE);
                 S.put(num, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
                     final Location height = location.clone();
                     int loc = 0;
                     int lifeSpan = 0;
-                    
+
                     @Override
                     public void run() {
                         ArrayList<Location> locs = getCircle(height, 2, 50);
@@ -982,15 +982,15 @@ public class NMS_v1_13_Up implements ParticleControl {
                     }
                 }, 0, 1));
             }
-            
+
             @Override
             public void run() {
                 if (noPlayers(l.clone(), range)) return;
                 startLoveWell(l, id);
             }
-        }, 0, 16));
+        }, 0, 16 + cooldown));
     }
-    
+
     private ArrayList<Location> getCircle(Location center, double radius, int amount) {
         World world = center.getWorld();
         double increment = (2 * Math.PI) / amount;
@@ -1003,7 +1003,7 @@ public class NMS_v1_13_Up implements ParticleControl {
         }
         return locations;
     }
-    
+
     private ArrayList<Location> getCircleReverse(Location center, double radius, int amount) {
         World world = center.getWorld();
         double increment = (2 * Math.PI) / amount;
@@ -1016,7 +1016,7 @@ public class NMS_v1_13_Up implements ParticleControl {
         }
         return locations;
     }
-    
+
     private Collection<Entity> getNearbyEntities(Location location, double x, double y, double z) {
         try {
             return location.getWorld().getNearbyEntities(location, x, y, z);
@@ -1024,7 +1024,7 @@ public class NMS_v1_13_Up implements ParticleControl {
         }
         return new ArrayList<>();
     }
-    
+
     private boolean noPlayers(Location location, int range) {
         try {
             Collection<Entity> out = getNearbyEntities(location, range, range, range);
@@ -1042,9 +1042,9 @@ public class NMS_v1_13_Up implements ParticleControl {
         }
         return true;
     }
-    
+
     private int randomColor() {
         return random.nextInt(255);
     }
-    
+
 }

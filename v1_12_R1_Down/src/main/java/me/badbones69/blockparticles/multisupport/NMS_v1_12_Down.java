@@ -36,7 +36,7 @@ public class NMS_v1_12_Down implements ParticleControl {
         return locations;
     }
     
-    public void playVolcano(final Location location, String id) {
+    public void playVolcano(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .8, .5);
             
@@ -45,10 +45,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.LAVA.display(0, 0, 0, 0, 10, l, 100);
             }
-        }, 0, 4));
+        }, 0, 4 + cooldown));
     }
     
-    public void playBigFlame(final Location location, String id) {
+    public void playBigFlame(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, .1, .5);
             
@@ -60,10 +60,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 for (Location loc : getCircle(l, 2, 25))
                     ParticleEffect.FLAME.display(0, 0, 0, 0, 1, loc, 100);
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
     
-    public void playFlame(final Location location, String id) {
+    public void playFlame(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
             
@@ -75,10 +75,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 for (Location loc : getCircle(l, 1, 20))
                     ParticleEffect.FLAME.display(0, 0, 0, 0, 1, loc, 100);
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
     
-    public void playDoubleSpiral(final Location location, String id, Particles particle, int amount) {
+    public void playDoubleSpiral(final Location location, String id, Particles particle, int amount, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .7, .5);
             int time = 16;
@@ -154,10 +154,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 }
                 time--;
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playSpiral(final Location location, String id, Particles particle, int amount) {
+    public void playSpiral(final Location location, String id, Particles particle, int amount, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .7, .5);
             int time = 16;
@@ -187,10 +187,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 }
                 time--;
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playCrit(final Location location, String id) {
+    public void playCrit(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 1.1, .5);
             
@@ -199,10 +199,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.CRIT.display(0, 0, 0, 0, 1, l.clone(), 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playBigCrit(final Location location, String id) {
+    public void playBigCrit(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .5, .5);
             
@@ -212,10 +212,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 for (Location location : getCircle(l, 2, 20))
                     ParticleEffect.CRIT.display(0, 0, 0, 0, 1, location, 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playStorm(final Location location, String id) {
+    public void playStorm(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 2, .5);
             
@@ -225,10 +225,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 ParticleEffect.CLOUD.display((float) .3, 0, (float) .3, 0, 15, l, 100);
                 ParticleEffect.WATER_DROP.display((float) .2, 0, (float) .2, 0, 10, l.clone().add(0, 0, .1), 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playFog(final Location location, String id) {
+    public void playFog(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .5, .5);
             
@@ -237,10 +237,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.CLOUD.display((float) .3, 0, (float) .3, (float) .05, 20, l, 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playEnchant(final Location location, String id) {
+    public void playEnchant(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 1.5, .5);
             
@@ -249,10 +249,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.ENCHANTMENT_TABLE.display((float) 0, 0, (float) 0, (float) 2, 20, l, 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playChains(final Location location, String id) {
+    public void playChains(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
             
@@ -291,10 +291,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 ParticleEffect.FLAME.display(0, 0, 0, 0, 1, l.clone().add(.5, .6, -.5), 100);
                 ParticleEffect.FLAME.display(0, 0, 0, 0, 1, l.clone().add(.4, .8, -.4), 100);
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
     
-    public void playFireStorm(final Location location, String id) {
+    public void playFireStorm(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 2, .5);
             
@@ -311,10 +311,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                     e.printStackTrace();
                 }
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playSnow(final Location location, String id) {
+    public void playSnow(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 2, .5);
             
@@ -323,10 +323,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.FIREWORKS_SPARK.display((float) .7, (float) .7, (float) .7, 0, 1, l, 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playSpew(final Location location, String id) {
+    public void playSpew(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 1, .5);
             
@@ -335,10 +335,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.FIREWORKS_SPARK.display(new Vector(randomVector(), .1, randomVector()), 1, l, 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playPotion(final Location location, String id) {
+    public void playPotion(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .2, .5);
             
@@ -349,10 +349,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 ParticleEffect.SPELL_MOB.display((float) .3, (float) 0, (float) .3, randomColor(), 6, l, 100);
                 ParticleEffect.SPELL_MOB.display((float) .3, (float) 0, (float) .3, randomColor(), 6, l, 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playMusic(final Location location, String id) {
+    public void playMusic(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .2, .5);
             final ArrayList<Location> locs = getCircle(l, 1, 16);
@@ -383,10 +383,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (time == 0) ParticleEffect.NOTE.display(0, 0, 0, randomColor(), 1, locs.get(i), 100);
                 time++;
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playMagic(final Location location, String id) {
+    public void playMagic(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .5, .5);
             int time = 16;
@@ -432,10 +432,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 }
                 time--;
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playSnowStorm(final Location location, String id) {
+    public void playSnowStorm(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 2, .5);
             
@@ -445,10 +445,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 ParticleEffect.CLOUD.display((float) .3, 0, (float) .3, 0, 15, l, 100);
                 ParticleEffect.FIREWORKS_SPARK.display((float) .3, (float) 0, (float) .3, 0, 2, l, 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playFireSpew(final Location location, String id) {
+    public void playFireSpew(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 1, .5);
             
@@ -459,10 +459,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 ParticleEffect.FLAME.display(new Vector(randomVector(), .1, randomVector()), (float) 1.5, l, 100);
                 ParticleEffect.FLAME.display(new Vector(randomVector(), .1, randomVector()), (float) 1.5, l, 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playFootPrint(final Location location, String id) {
+    public void playFootPrint(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
             
@@ -471,10 +471,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.FOOTSTEP.display(1, 0, 1, 0, 3, l, 100);
             }
-        }, 0, 20));
+        }, 0, 20 + cooldown));
     }
     
-    public void playHappyVillager(final Location location, String id) {
+    public void playHappyVillager(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
             
@@ -483,10 +483,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.VILLAGER_HAPPY.display((float) .5, (float) .5, (float) .5, 0, 10, l, 100);
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
     
-    public void playAngryVillager(final Location location, String id) {
+    public void playAngryVillager(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
             
@@ -495,10 +495,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.VILLAGER_ANGRY.display((float) .5, (float) .5, (float) .5, 0, 5, l, 100);
             }
-        }, 0, 10));
+        }, 0, 10 + cooldown));
     }
     
-    public void playMobSpawner(final Location location, String id) {
+    public void playMobSpawner(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
             
@@ -507,10 +507,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.FLAME.display((float) .5, (float) .5, (float) .5, 0, 15, l, 100);
             }
-        }, 0, 8));
+        }, 0, 8 + cooldown));
     }
     
-    public void startWater(final Location location, String id) {
+    public void startWater(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .8, .6);
             
@@ -524,10 +524,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 ParticleEffect.WATER_DROP.display(0, 0, 0, 0, 10, l.clone().add(.2, .3, -.2), 100);
                 ParticleEffect.WATER_DROP.display(0, 0, 0, 0, 10, l.clone().add(-.2, .3, -.2), 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playEnderSignal(final Location location, String id) {
+    public void playEnderSignal(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 0, .5);
             
@@ -539,10 +539,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 location.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 1);
                 location.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 1);
             }
-        }, 0, 8));
+        }, 0, 8 + cooldown));
     }
     
-    public void playRainbow(final Location location, String id) {
+    public void playRainbow(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .1, .5);
             
@@ -551,10 +551,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.REDSTONE.display((float) .5, (float) .5, (float) .5, 1, 10, l, 100);
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
     
-    public void playSnowBlast(final Location location, String id) {
+    public void playSnowBlast(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, .5, .5);
             
@@ -563,10 +563,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 ParticleEffect.SNOW_SHOVEL.display(0, 0, 0, (float) .2, 40, l, 100);
             }
-        }, 0, 2));
+        }, 0, 2 + cooldown));
     }
     
-    public void playHalo(final Location location, String id) {
+    public void playHalo(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.add(.5, 1.3, .5);
             
@@ -596,10 +596,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                     e.printStackTrace();
                 }
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
     
-    public void playSantaHat(final Location location, String id) {
+    public void playSantaHat(final Location location, String id, int cooldown) {
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l1 = location.clone().add(.5, 1, .5);
             final Location l2 = l1.clone().add(0, .05, 0);
@@ -636,10 +636,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                     e.printStackTrace();
                 }
             }
-        }, 0, 5));
+        }, 0, 5 + cooldown));
     }
     
-    public void playSoulWell(final Location location, final String id) {
+    public void playSoulWell(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
@@ -674,10 +674,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 startSoulWell(l, id);
             }
-        }, 0, 16));
+        }, 0, 16 + cooldown));
     }
     
-    public void playBigSoulWell(final Location location, final String id) {
+    public void playBigSoulWell(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
@@ -712,10 +712,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 startBigSoulWell(l, id);
             }
-        }, 0, 25));
+        }, 0, 25 + cooldown));
     }
     
-    public void playFlameWheel(final Location location, final String id) {
+    public void playFlameWheel(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, .1, .5);
@@ -733,7 +733,7 @@ public class NMS_v1_12_Down implements ParticleControl {
                     public void run() {
                         ArrayList<Location> locs = getCircle(l, 3.5, 75);
                         ArrayList<Location> locs2 = getCircleReverse(l, 3.5, 75);
-                        float speed = (float) .15;
+                        float cooldown = (float) .15;
                         Vector v = locs.get(i).toVector().subtract(l.toVector()).normalize();
                         Vector v2 = locs2.get(i).toVector().subtract(l.toVector()).normalize();
                         Vector v3 = locs.get(o).toVector().subtract(l.toVector()).normalize();
@@ -745,10 +745,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                             }
                         }
                         //Throws the fire inwords.
-                        ParticleEffect.FLAME.display(v.multiply(-2), speed, locs.get(i), 100);
-                        ParticleEffect.FLAME.display(v2.multiply(-2), speed, locs2.get(i), 100);
-                        ParticleEffect.FLAME.display(v3.multiply(-2), speed, locs.get(o), 100);
-                        ParticleEffect.FLAME.display(v4.multiply(-2), speed, locs2.get(o), 100);
+                        ParticleEffect.FLAME.display(v.multiply(-2), cooldown, locs.get(i), 100);
+                        ParticleEffect.FLAME.display(v2.multiply(-2), cooldown, locs2.get(i), 100);
+                        ParticleEffect.FLAME.display(v3.multiply(-2), cooldown, locs.get(o), 100);
+                        ParticleEffect.FLAME.display(v4.multiply(-2), cooldown, locs2.get(o), 100);
                         i++;
                         f++;
                         o--;
@@ -769,10 +769,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 startFlameWheel(l.clone(), id);
             }
-        }, 0, 25));
+        }, 0, 25 + cooldown));
     }
     
-    public void playWitchTornado(final Location location, final String id) {
+    public void playWitchTornado(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
@@ -812,10 +812,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 startWitchTornado(l, id);
             }
-        }, 0, 30));
+        }, 0, 30 + cooldown));
     }
     
-    public void playLoveTornado(final Location location, final String id) {
+    public void playLoveTornado(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
@@ -855,10 +855,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 startLoveTornado(l, id);
             }
-        }, 0, 30));
+        }, 0, 30 + cooldown));
     }
     
-    public void playBigLoveWell(final Location location, final String id) {
+    public void playBigLoveWell(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
@@ -893,10 +893,10 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 startBigLoveWell(l, id);
             }
-        }, 0, 25));
+        }, 0, 25 + cooldown));
     }
     
-    public void playLoveWell(final Location location, final String id) {
+    public void playLoveWell(final Location location, final String id, int cooldown) {
         final HashMap<Integer, Integer> S = new HashMap<>();
         locations.put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             final Location l = location.clone().add(.5, 0, .5);
@@ -931,7 +931,7 @@ public class NMS_v1_12_Down implements ParticleControl {
                 if (noPlayers(l.clone(), range)) return;
                 startLoveWell(l, id);
             }
-        }, 0, 16));
+        }, 0, 16 + cooldown));
     }
     
     private ArrayList<Location> getCircle(Location center, double radius, int amount) {

@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Fountains implements Listener {
-    
+
     private static Random random = new Random();
     private static ParticleManager bp = ParticleManager.getInstance();
     private static List<String> pokemonHeads = Arrays.asList(
@@ -166,34 +166,43 @@ public class Fountains implements Listener {
     "32f0489ca126a6e9f9afa59eb491b1853395b582b454fc2ad48027226252d121",
     "b5651a18f54714b0b8f7f011c018373b33fd1541ca6f1cfe7a6c97b65241f5",
     "f5612dc7b86d71afc1197301c15fd979e9f39e7b1f41d8f1ebdf8115576e2e");
-    
+
     private static float randomVector() {
         return (float) -.1 + (float) (Math.random() * ((.1 - -.1)));
     }
-    
-    public static void startCustomFountain(Location loc, String id, String fountainName) {
-        startCustomFountain(loc, id, bp.getCustomFountain(fountainName));
+
+    public static void startCustomFountain(Location loc, String id, String fountainName, int cooldown) {
+        startCustomFountain(loc, id, bp.getCustomFountain(fountainName), cooldown);
     }
-    
-    public static void startCustomFountain(Location loc, String id, CustomFountain fountain) {
+
+    public static void startCustomFountain(Location loc, String id, CustomFountain fountain, int cooldown) {
+        int cycleCooldown = 3 + cooldown;
+        int itemSpawnCooldown = cycleCooldown / 40;
+        int itemDespawnCooldown = 40 + cycleCooldown * 2;
         bp.getParticleControl().getLocations().put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(bp.getPlugin(), () -> {
-            for (ItemStack head : getRandomCustomHead(fountain.getHeads())) {
-                final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), head);
-                if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-                    headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
-                } else {
-                    headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-                }
-                bp.addFountainItem(headItem);
+            List<ItemStack> headList = getRandomCustomHead(fountain.getHeads());
+            for (ItemStack head : headList) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
-                    bp.removeFountainItem(headItem);
-                    headItem.remove();
-                }, 2 * 20);
+                    final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), head);
+                    if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+                        headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
+                    } else {
+                        headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                    }
+                    bp.addFountainItem(headItem);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                        bp.removeFountainItem(headItem);
+                        headItem.remove();
+                    }, itemDespawnCooldown);
+                }, (long) itemSpawnCooldown * headList.indexOf(head));
             }
-        }, 0, 3));
+        }, 0, cycleCooldown));
     }
-    
-    public static void startHalloween(final Location loc, String id) {
+
+    public static void startHalloween(final Location loc, String id, int cooldown) {
+        int cycleCooldown = 2 + cooldown;
+        int itemSpawnCooldown = cycleCooldown / 40;
+        int itemDespawnCooldown = 40 + cycleCooldown * 2;
         bp.getParticleControl().getLocations().put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(bp.getPlugin(), () -> {
             ItemStack flesh = new ItemStack(Material.ROTTEN_FLESH);
             ItemMeta m = flesh.getItemMeta();
@@ -205,32 +214,53 @@ public class Fountains implements Listener {
             bone.setItemMeta(m);
             ItemStack pumpkin = new ItemStack(Material.JACK_O_LANTERN);
             pumpkin.setItemMeta(m);
-            final Item fleshItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), flesh);
-            final Item redstoneItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), redstone);
-            final Item boneItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), bone);
-            final Item pumpkinItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), pumpkin);
-            fleshItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-            bp.addFountainItem(fleshItem);
-            redstoneItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-            bp.addFountainItem(redstoneItem);
-            boneItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-            bp.addFountainItem(boneItem);
-            pumpkinItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-            bp.addFountainItem(pumpkinItem);
+
             Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
-                bp.removeFountainItem(fleshItem);
-                fleshItem.remove();
-                bp.removeFountainItem(redstoneItem);
-                redstoneItem.remove();
-                bp.removeFountainItem(boneItem);
-                boneItem.remove();
-                bp.removeFountainItem(pumpkinItem);
-                pumpkinItem.remove();
-            }, 2 * 20);
-        }, 0, 2));
+                final Item fleshItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), flesh);
+                fleshItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                bp.addFountainItem(fleshItem);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                    bp.removeFountainItem(fleshItem);
+                    fleshItem.remove();
+                }, itemDespawnCooldown);
+            }, 0);
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                final Item redstoneItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), redstone);
+                redstoneItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                bp.addFountainItem(redstoneItem);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                    bp.removeFountainItem(redstoneItem);
+                    redstoneItem.remove();
+                }, itemDespawnCooldown);
+            }, itemSpawnCooldown);
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                final Item boneItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), bone);
+                boneItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                bp.addFountainItem(boneItem);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                    bp.removeFountainItem(boneItem);
+                    boneItem.remove();
+                }, itemDespawnCooldown);
+            }, itemSpawnCooldown * 2);
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                final Item pumpkinItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), pumpkin);
+                pumpkinItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                bp.addFountainItem(pumpkinItem);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                    bp.removeFountainItem(pumpkinItem);
+                    pumpkinItem.remove();
+                }, itemDespawnCooldown);
+            }, itemSpawnCooldown * 3);
+        }, 0, cycleCooldown));
     }
-    
-    public static void startGems(final Location loc, String id) {
+
+    public static void startGems(final Location loc, String id, int cooldown) {
+        int cycleCooldown = 2 + cooldown;
+        int itemSpawnCooldown = cycleCooldown / 40;
+        int itemDespawnCooldown = 40 + cycleCooldown * 2;
         bp.getParticleControl().getLocations().put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(bp.getPlugin(), () -> {
             ItemStack emerald = new ItemStack(Material.EMERALD);
             ItemMeta m = emerald.getItemMeta();
@@ -240,139 +270,187 @@ public class Fountains implements Listener {
             diamond.setItemMeta(m);
             ItemStack gold = new ItemStack(Material.GOLD_INGOT);
             gold.setItemMeta(m);
-            final Item emeraldItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), emerald);
-            final Item diamondItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), diamond);
-            final Item goldItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), gold);
-            emeraldItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-            bp.addFountainItem(emeraldItem);
-            diamondItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-            bp.addFountainItem(diamondItem);
-            goldItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-            bp.addFountainItem(goldItem);
+
             Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
-                bp.removeFountainItem(emeraldItem);
-                emeraldItem.remove();
-                bp.removeFountainItem(diamondItem);
-                diamondItem.remove();
-                bp.removeFountainItem(goldItem);
-                goldItem.remove();
-            }, 2 * 20);
-        }, 0, 2));
+                final Item emeraldItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), emerald);
+                emeraldItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                bp.addFountainItem(emeraldItem);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                    bp.removeFountainItem(emeraldItem);
+                    emeraldItem.remove();
+                }, itemDespawnCooldown);
+            }, 0);
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                final Item diamondItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), diamond);
+                diamondItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                bp.addFountainItem(diamondItem);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                    bp.removeFountainItem(diamondItem);
+                    diamondItem.remove();
+                }, itemDespawnCooldown);
+            }, itemSpawnCooldown);
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                final Item goldItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, 1, .5), gold);
+                goldItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                bp.addFountainItem(goldItem);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                    bp.removeFountainItem(goldItem);
+                    goldItem.remove();
+                }, itemDespawnCooldown);
+            }, itemSpawnCooldown * 2);
+        }, 0, cycleCooldown));
     }
-    
-    public static void startHeads(final Location loc, String id) {
+
+    public static void startHeads(final Location loc, String id, int cooldown) {
+        int cycleCooldown = 3 + cooldown;
+        int itemSpawnCooldown = cycleCooldown / 40;
+        int itemDespawnCooldown = 40 + cycleCooldown * 2;
         bp.getParticleControl().getLocations().put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(bp.getPlugin(), () -> {
-            String name;
             int radius = 10;
-            for (Entity entity : getNearbyEntities(loc.clone(), radius, radius, radius)) {
+            List<Entity> nearbyEntityList = getNearbyEntities(loc.clone(), radius, radius, radius);
+            for (Entity entity : nearbyEntityList) {
                 if (entity instanceof Player) {
-                    name = entity.getName();
-                    final Item head = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead(name));
-                    if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-                        head.setVelocity(new Vector(randomVector(), .01, randomVector()));
-                    } else {
-                        head.setVelocity(new Vector(randomVector(), .3, randomVector()));
-                    }
-                    bp.addFountainItem(head);
+                    String name = entity.getName();
                     Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
-                        bp.removeFountainItem(head);
-                        head.remove();
-                    }, 2 * 20);
+                        final Item head = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead(name));
+                        if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+                            head.setVelocity(new Vector(randomVector(), .01, randomVector()));
+                        } else {
+                            head.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                        }
+                        bp.addFountainItem(head);
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                            bp.removeFountainItem(head);
+                            head.remove();
+                        }, itemDespawnCooldown);
+                    }, (long) itemSpawnCooldown * nearbyEntityList.indexOf(entity));
                 }
             }
-        }, 0, 3));
+        }, 0, cycleCooldown));
     }
-    
-    public static void startPresents(final Location loc, String id) {
+
+    public static void startPresents(final Location loc, String id, int cooldown) {
+        int cycleCooldown = 3 + cooldown;
+        int itemSpawnCooldown = cycleCooldown / 40;
+        int itemDespawnCooldown = 40 + cycleCooldown * 2;
         bp.getParticleControl().getLocations().put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(bp.getPlugin(), () -> {
-            for (String head : getRandomHeads(presentHeads)) {
-                final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead("http://textures.minecraft.net/texture/" + head));
-                if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-                    headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
-                } else {
-                    headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-                }
-                bp.addFountainItem(headItem);
+            List<String> headList = getRandomHeads(presentHeads);
+            for (String head : headList) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
-                    bp.removeFountainItem(headItem);
-                    headItem.remove();
-                }, 2 * 20);
+                    final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead("http://textures.minecraft.net/texture/" + head));
+                    if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+                        headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
+                    } else {
+                        headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                    }
+                    bp.addFountainItem(headItem);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                        bp.removeFountainItem(headItem);
+                        headItem.remove();
+                    }, itemDespawnCooldown);
+                }, (long) itemSpawnCooldown * headList.indexOf(head));
             }
-        }, 0, 3));
+        }, 0, cycleCooldown));
     }
-    
-    public static void startMobs(final Location loc, String id) {
+
+    public static void startMobs(final Location loc, String id, int cooldown) {
+        int cycleCooldown = 3 + cooldown;
+        int itemSpawnCooldown = cycleCooldown / 40;
+        int itemDespawnCooldown = 40 + cycleCooldown * 2;
         bp.getParticleControl().getLocations().put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(bp.getPlugin(), () -> {
-            for (String head : getRandomHeads(mobHeads)) {
-                final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead("http://textures.minecraft.net/texture/" + head));
-                if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-                    headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
-                } else {
-                    headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-                }
-                bp.addFountainItem(headItem);
+            List<String> headList = getRandomHeads(mobHeads);
+            for (String head : headList) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
-                    bp.removeFountainItem(headItem);
-                    headItem.remove();
-                }, 2 * 20);
+                    final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead("http://textures.minecraft.net/texture/" + head));
+                    if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+                        headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
+                    } else {
+                        headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                    }
+                    bp.addFountainItem(headItem);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                        bp.removeFountainItem(headItem);
+                        headItem.remove();
+                    }, itemDespawnCooldown);
+                }, (long) itemSpawnCooldown * headList.indexOf(head));
             }
-        }, 0, 3));
+        }, 0, cycleCooldown));
     }
-    
-    public static void startFood(final Location loc, String id) {
+
+    public static void startFood(final Location loc, String id, int cooldown) {
+        int cycleCooldown = 3 + cooldown;
+        int itemSpawnCooldown = cycleCooldown / 40;
+        int itemDespawnCooldown = 40 + cycleCooldown * 2;
         bp.getParticleControl().getLocations().put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(bp.getPlugin(), () -> {
-            for (String head : getRandomHeads(foodHeads)) {
-                final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead("http://textures.minecraft.net/texture/" + head));
-                if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-                    headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
-                } else {
-                    headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-                }
-                bp.addFountainItem(headItem);
+            List<String> headList = getRandomHeads(foodHeads);
+            for (String head : headList) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
-                    bp.removeFountainItem(headItem);
-                    headItem.remove();
-                }, 2 * 20);
+                    final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead("http://textures.minecraft.net/texture/" + head));
+                    if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+                        headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
+                    } else {
+                        headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                    }
+                    bp.addFountainItem(headItem);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                        bp.removeFountainItem(headItem);
+                        headItem.remove();
+                    }, itemDespawnCooldown);
+                }, (long) itemSpawnCooldown * headList.indexOf(head));
             }
-        }, 0, 3));
+        }, 0, cycleCooldown));
     }
-    
-    public static void startPokemon(final Location loc, String id) {
+
+    public static void startPokemon(final Location loc, String id, int cooldown) {
+        int cycleCooldown = 3 + cooldown;
+        int itemSpawnCooldown = cycleCooldown / 40;
+        int itemDespawnCooldown = 40 + cycleCooldown * 2;
         bp.getParticleControl().getLocations().put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(bp.getPlugin(), () -> {
-            for (String head : getRandomHeads(pokemonHeads)) {
-                final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead("http://textures.minecraft.net/texture/" + head));
-                if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-                    headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
-                } else {
-                    headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-                }
-                bp.addFountainItem(headItem);
+            List<String> headList = getRandomHeads(pokemonHeads);
+            for (String head : headList) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
-                    bp.removeFountainItem(headItem);
-                    headItem.remove();
-                }, 2 * 20);
+                    final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead("http://textures.minecraft.net/texture/" + head));
+                    if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+                        headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
+                    } else {
+                        headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                    }
+                    bp.addFountainItem(headItem);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                        bp.removeFountainItem(headItem);
+                        headItem.remove();
+                    }, itemDespawnCooldown);
+                }, (long) itemSpawnCooldown * headList.indexOf(head));
             }
-        }, 0, 3));
+        }, 0, cycleCooldown));
     }
-    
-    public static void startMario(final Location loc, String id) {
+
+    public static void startMario(final Location loc, String id, int cooldown) {
+        int cycleCooldown = 3 + cooldown;
+        int itemSpawnCooldown = cycleCooldown / 40;
+        int itemDespawnCooldown = 40 + cycleCooldown * 2;
         bp.getParticleControl().getLocations().put(id, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(bp.getPlugin(), () -> {
-            for (String head : getRandomHeads(marioHeads)) {
-                final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead("http://textures.minecraft.net/texture/" + head));
-                if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-                    headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
-                } else {
-                    headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
-                }
-                bp.addFountainItem(headItem);
+            List<String> headList = getRandomHeads(marioHeads);
+            for (String head : headList) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
-                    bp.removeFountainItem(headItem);
-                    headItem.remove();
-                }, 2 * 20);
+                    final Item headItem = Bukkit.getWorld(loc.getWorld().getName()).dropItem(loc.clone().add(.5, .8, .5), Methods.getPlayerHead("http://textures.minecraft.net/texture/" + head));
+                    if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+                        headItem.setVelocity(new Vector(randomVector(), .01, randomVector()));
+                    } else {
+                        headItem.setVelocity(new Vector(randomVector(), .3, randomVector()));
+                    }
+                    bp.addFountainItem(headItem);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(bp.getPlugin(), () -> {
+                        bp.removeFountainItem(headItem);
+                        headItem.remove();
+                    }, itemDespawnCooldown);
+                }, (long) itemSpawnCooldown * headList.indexOf(head));
             }
-        }, 0, 3));
+        }, 0, cycleCooldown));
     }
-    
+
     private static List<String> getRandomHeads(List<String> headList) {
         List<String> pickedHeads = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -381,7 +459,7 @@ public class Fountains implements Listener {
         }
         return pickedHeads;
     }
-    
+
     private static List<ItemStack> getRandomCustomHead(List<ItemStack> headList) {
         List<ItemStack> pickedHeads = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -390,7 +468,7 @@ public class Fountains implements Listener {
         }
         return pickedHeads;
     }
-    
+
     @SuppressWarnings("deprecation")
     private static List<Entity> getNearbyEntities(Location loc, double x, double y, double z) {
         if (loc == null || loc.getWorld() == null) return new ArrayList<>();
@@ -399,12 +477,12 @@ public class Fountains implements Listener {
         ent.remove();
         return out;
     }
-    
+
     @EventHandler
     public void onHopperPickUp(InventoryPickupItemEvent e) {
         if (bp.getFountainItem().contains(e.getItem())) {
             e.setCancelled(true);
         }
     }
-    
+
 }

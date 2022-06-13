@@ -33,6 +33,7 @@ public class BPCommands implements CommandExecutor {
                         sender.sendMessage(Methods.color("&8- &6/bp add <id> &3Create a new Block Particle Location."));
                         sender.sendMessage(Methods.color("&8- &6/bp delete <id> &3Delete a Block Particle Location."));
                         sender.sendMessage(Methods.color("&8- &6/bp set <id> [type] &3Set the Block Particle Locations Particle."));
+                        sender.sendMessage(Methods.color("&8- &6/bp cooldown <id> <0-1000> &3Set the Block Particle Locations spawning cooldown."));
                         sender.sendMessage(Methods.color("&8- &6/bp types &3Shows all Types of Particles that can be used."));
                         sender.sendMessage(Methods.color("&8- &6/bp reload &3Reload all Block Particle Locations."));
                         return true;
@@ -75,6 +76,19 @@ public class BPCommands implements CommandExecutor {
                             Methods.setLoc(sender, args[1], args[2]);
                         } else {
                             sender.sendMessage(Methods.color(prefix + "&c/bp set <id> [type]"));
+                        }
+                        return true;
+                    case "cooldown":
+                        if (args.length >= 3) {
+                            int cooldown = -1;
+                            try { cooldown = Integer.parseInt(args[2]); } catch (NumberFormatException ignored) {}
+                            if (cooldown >= 0 && cooldown <= 1000) {
+                                Methods.setCooldown(sender, args[1], cooldown);
+                            } else {
+                                sender.sendMessage(Methods.color(prefix + "&c/bp cooldown <id> <0-100>"));
+                            }
+                        } else {
+                            sender.sendMessage(Methods.color(prefix + "&c/bp cooldown <id> <0-100>"));
                         }
                         return true;
                     case "add":

@@ -28,6 +28,7 @@ public class BPTab implements TabCompleter {
                 "list",
                 "types",
                 "set",
+                "cooldown",
                 "add",
                 "delete"));
             }
@@ -35,6 +36,7 @@ public class BPTab implements TabCompleter {
         } else if (args.length == 2) {// /bp arg1
             switch (args[0].toLowerCase()) {
                 case "set":
+                case "cooldown":
                 case "add":
                 case "delete":
                     completions.addAll(Methods.getLocations());

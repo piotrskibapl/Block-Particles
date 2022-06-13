@@ -98,153 +98,154 @@ public class Methods implements Listener {
             for (final String id : data.getConfigurationSection("locations").getKeys(false)) {
                 World world = Bukkit.getServer().getWorld(data.getString("locations." + id + ".world"));
                 String particle = data.getString("locations." + id + ".particle");
+                int cooldown = data.getInt("locations." + id + ".cooldown");
                 final Location loc = new Location(world, data.getInt("locations." + id + ".x"), data.getInt("locations." + id + ".y"), data.getInt("locations." + id + ".z"));
                 if (BPFountains.getFromName(particle) != null) {
                     switch (BPFountains.getFromName(particle)) {
                         case MARIO:
-                            Fountains.startMario(loc, id);
+                            Fountains.startMario(loc, id, cooldown);
                             break;
                         case POKEMON:
-                            Fountains.startPokemon(loc, id);
+                            Fountains.startPokemon(loc, id, cooldown);
                             break;
                         case FOOD:
-                            Fountains.startFood(loc, id);
+                            Fountains.startFood(loc, id, cooldown);
                             break;
                         case MOBS:
-                            Fountains.startMobs(loc, id);
+                            Fountains.startMobs(loc, id, cooldown);
                             break;
                         case HALLOWEEN:
-                            Fountains.startHalloween(loc, id);
+                            Fountains.startHalloween(loc, id, cooldown);
                             break;
                         case GEMS:
-                            Fountains.startGems(loc, id);
+                            Fountains.startGems(loc, id, cooldown);
                             break;
                         case HEADS:
-                            Fountains.startHeads(loc, id);
+                            Fountains.startHeads(loc, id, cooldown);
                             break;
                         case PRESENTS:
-                            Fountains.startPresents(loc, id);
+                            Fountains.startPresents(loc, id, cooldown);
                             break;
                         case CUSTOM:
-                            Fountains.startCustomFountain(loc, id, particle);
+                            Fountains.startCustomFountain(loc, id, particle, cooldown);
                             break;
                     }
                 }
                 if (BPParticles.getFromName(particle) != null) {
                     switch (BPParticles.getFromName(particle)) {
                         case LOVEWELL:
-                            bp.getParticleControl().playLoveWell(loc, id);
+                            bp.getParticleControl().playLoveWell(loc, id, cooldown);
                             break;
                         case BIGLOVEWELL:
-                            bp.getParticleControl().playBigLoveWell(loc, id);
+                            bp.getParticleControl().playBigLoveWell(loc, id, cooldown);
                             break;
                         case LOVETORNADO:
-                            bp.getParticleControl().playLoveTornado(loc, id);
+                            bp.getParticleControl().playLoveTornado(loc, id, cooldown);
                             break;
                         case WITCHTORNADO:
-                            bp.getParticleControl().playWitchTornado(loc, id);
+                            bp.getParticleControl().playWitchTornado(loc, id, cooldown);
                             break;
                         case FLAMEWHEEL:
-                            bp.getParticleControl().playFlameWheel(loc, id);
+                            bp.getParticleControl().playFlameWheel(loc, id, cooldown);
                             break;
                         case SOULWELL:
-                            bp.getParticleControl().playSoulWell(loc, id);
+                            bp.getParticleControl().playSoulWell(loc, id, cooldown);
                             break;
                         case BIGSOULWELL:
-                            bp.getParticleControl().playBigSoulWell(loc, id);
+                            bp.getParticleControl().playBigSoulWell(loc, id, cooldown);
                             break;
                         case SANTAHAT:
-                            bp.getParticleControl().playSantaHat(loc, id);
+                            bp.getParticleControl().playSantaHat(loc, id, cooldown);
                             break;
                         case SNOWBLAST:
-                            bp.getParticleControl().playSnowBlast(loc, id);
+                            bp.getParticleControl().playSnowBlast(loc, id, cooldown);
                             break;
                         case RAINBOW:
-                            bp.getParticleControl().playRainbow(loc, id);
+                            bp.getParticleControl().playRainbow(loc, id, cooldown);
                             break;
                         case ENDERSIGNAL:
-                            bp.getParticleControl().playEnderSignal(loc, id);
+                            bp.getParticleControl().playEnderSignal(loc, id, cooldown);
                             break;
                         case MOBSPAWNER:
-                            bp.getParticleControl().playMobSpawner(loc, id);
+                            bp.getParticleControl().playMobSpawner(loc, id, cooldown);
                             break;
                         case ANGRYVILLAGER:
-                            bp.getParticleControl().playAngryVillager(loc, id);
+                            bp.getParticleControl().playAngryVillager(loc, id, cooldown);
                             break;
                         case HAPPYVILLAGER:
-                            bp.getParticleControl().playHappyVillager(loc, id);
+                            bp.getParticleControl().playHappyVillager(loc, id, cooldown);
                             break;
                         case FOOTPRINT:
-                            bp.getParticleControl().playFootPrint(loc, id);
+                            bp.getParticleControl().playFootPrint(loc, id, cooldown);
                             break;
                         case FIRESPEW:
-                            bp.getParticleControl().playFireSpew(loc, id);
+                            bp.getParticleControl().playFireSpew(loc, id, cooldown);
                             break;
                         case SNOWSTORM:
-                            bp.getParticleControl().playSnowStorm(loc, id);
+                            bp.getParticleControl().playSnowStorm(loc, id, cooldown);
                             break;
                         case DOUBLEWITCH:
-                            bp.getParticleControl().playDoubleSpiral(loc, id, Particles.DOUBLEWITCH, 5);
+                            bp.getParticleControl().playDoubleSpiral(loc, id, Particles.DOUBLEWITCH, 5, cooldown);
                             break;
                         case WITCH:
-                            bp.getParticleControl().playSpiral(loc, id, Particles.WITCH, 5);
+                            bp.getParticleControl().playSpiral(loc, id, Particles.WITCH, 5, cooldown);
                             break;
                         case MAGIC:
-                            bp.getParticleControl().playMagic(loc, id);
+                            bp.getParticleControl().playMagic(loc, id, cooldown);
                             break;
                         case SPEW:
-                            bp.getParticleControl().playSpew(loc, id);
+                            bp.getParticleControl().playSpew(loc, id, cooldown);
                             break;
                         case HALO:
-                            bp.getParticleControl().playHalo(loc, id);
+                            bp.getParticleControl().playHalo(loc, id, cooldown);
                             break;
                         case MUSIC:
-                            bp.getParticleControl().playMusic(loc, id);
+                            bp.getParticleControl().playMusic(loc, id, cooldown);
                             break;
                         case POTION:
-                            bp.getParticleControl().playPotion(loc, id);
+                            bp.getParticleControl().playPotion(loc, id, cooldown);
                             break;
                         case SNOW:
-                            bp.getParticleControl().playSnow(loc, id);
+                            bp.getParticleControl().playSnow(loc, id, cooldown);
                             break;
                         case FIRESTORM:
-                            bp.getParticleControl().playFireStorm(loc, id);
+                            bp.getParticleControl().playFireStorm(loc, id, cooldown);
                             break;
                         case WATER:
-                            bp.getParticleControl().startWater(loc, id);
+                            bp.getParticleControl().startWater(loc, id, cooldown);
                             break;
                         case CHAINS:
-                            bp.getParticleControl().playChains(loc, id);
+                            bp.getParticleControl().playChains(loc, id, cooldown);
                             break;
                         case ENCHANT:
-                            bp.getParticleControl().playEnchant(loc, id);
+                            bp.getParticleControl().playEnchant(loc, id, cooldown);
                             break;
                         case FOG:
-                            bp.getParticleControl().playFog(loc, id);
+                            bp.getParticleControl().playFog(loc, id, cooldown);
                             break;
                         case STORM:
-                            bp.getParticleControl().playStorm(loc, id);
+                            bp.getParticleControl().playStorm(loc, id, cooldown);
                             break;
                         case BIGFLAME:
-                            bp.getParticleControl().playBigFlame(loc, id);
+                            bp.getParticleControl().playBigFlame(loc, id, cooldown);
                             break;
                         case FLAME:
-                            bp.getParticleControl().playFlame(loc, id);
+                            bp.getParticleControl().playFlame(loc, id, cooldown);
                             break;
                         case VOLCANO:
-                            bp.getParticleControl().playVolcano(loc, id);
+                            bp.getParticleControl().playVolcano(loc, id, cooldown);
                             break;
                         case SPIRAL:
-                            bp.getParticleControl().playSpiral(loc, id, Particles.SPIRAL, 1);
+                            bp.getParticleControl().playSpiral(loc, id, Particles.SPIRAL, 1, cooldown);
                             break;
                         case DOUBLESPIRAL:
-                            bp.getParticleControl().playDoubleSpiral(loc, id, Particles.DOUBLESPIRAL, 5);
+                            bp.getParticleControl().playDoubleSpiral(loc, id, Particles.DOUBLESPIRAL, 5, cooldown);
                             break;
                         case CRIT:
-                            bp.getParticleControl().playCrit(loc, id);
+                            bp.getParticleControl().playCrit(loc, id, cooldown);
                             break;
                         case BIGCRIT:
-                            bp.getParticleControl().playBigCrit(loc, id);
+                            bp.getParticleControl().playBigCrit(loc, id, cooldown);
                             break;
                     }
                 }
@@ -277,6 +278,7 @@ public class Methods implements Listener {
         Files.DATA.getFile().set("locations." + name + ".y", y);
         Files.DATA.getFile().set("locations." + name + ".z", z);
         Files.DATA.getFile().set("locations." + name + ".particle", "Spiral");
+        Files.DATA.getFile().set("locations." + name + ".cooldown", 0);
         Files.DATA.saveFile();
         kill();
         startParticles();
@@ -350,7 +352,7 @@ public class Methods implements Listener {
         item.setItemMeta(m);
         return item;
     }
-    
+
     public static void setLoc(CommandSender player, String name, String particle) {
         String prefix = Files.CONFIG.getFile().getString("settings.prefix");
         if (BPFountains.getFromName(particle) == null && BPParticles.getFromName(particle) == null && bp.getCustomFountain(particle) == null) {
@@ -365,6 +367,23 @@ public class Methods implements Listener {
                     kill();
                     startParticles();
                     player.sendMessage(color(prefix + "&3You have just set &6" + name + "'s &3particle to &6" + particle + "&3."));
+                    return;
+                }
+            }
+        }
+        player.sendMessage(color(prefix + "&3There are no locations called &6" + name + "&3."));
+    }
+
+    public static void setCooldown(CommandSender player, String name, int cooldown) {
+        String prefix = Files.CONFIG.getFile().getString("settings.prefix");
+        if (Files.DATA.getFile().contains("locations")) {
+            for (String loc : Files.DATA.getFile().getConfigurationSection("locations").getKeys(false)) {
+                if (loc.equalsIgnoreCase(name)) {
+                    Files.DATA.getFile().set("locations." + loc + ".cooldown", cooldown);
+                    Files.DATA.saveFile();
+                    kill();
+                    startParticles();
+                    player.sendMessage(color(prefix + "&3You have just set &6" + name + "'s &3cooldown to &6" + cooldown + "&3."));
                     return;
                 }
             }
