@@ -85,10 +85,10 @@ public class BPCommands implements CommandExecutor {
                             if (cooldown >= 0 && cooldown <= 1000) {
                                 Methods.setCooldown(sender, args[1], cooldown);
                             } else {
-                                sender.sendMessage(Methods.color(prefix + "&c/bp cooldown <id> <0-100>"));
+                                sender.sendMessage(Methods.color(prefix + "&c/bp cooldown <id> <0-1000>"));
                             }
                         } else {
-                            sender.sendMessage(Methods.color(prefix + "&c/bp cooldown <id> <0-100>"));
+                            sender.sendMessage(Methods.color(prefix + "&c/bp cooldown <id> <0-1000>"));
                         }
                         return true;
                     case "add":
